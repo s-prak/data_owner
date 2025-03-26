@@ -3,6 +3,8 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const cors = require('cors');
+const axios = require('axios');
+const { encrypt } = require("./encrypt"); 
 
 const app = express();
 const port = 5001;
@@ -28,11 +30,31 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // Upload endpoint
-app.post('/upload', upload.single('file'), (req, res) => {
+app.post('/upload', upload.single('file'), async (req, res) => {
   if (!req.file) {
     return res.status(400).send('No file uploaded.');
   }
-  res.status(200).send('File uploaded successfully');
+
+  try {
+    // Read file content
+    const fileContent = fs.readFileSync(req.file.path, 'utf8');
+
+    // Prepare request body
+    const requestBody = {
+      docId: encrypt(req.file.originalname.split('.')[0]), // Use original filename
+      doc: encrypt(fileContent)
+    };
+
+    // Send file data to the API
+    const response = await axios.post('http://localhost:8080/document/post-doc', requestBody, {
+      headers: { 'Content-Type': 'application/json' }
+    });
+
+    res.status(200).send(`File uploaded and sent successfully: ${response.data}`);
+  } catch (error) {
+    console.error('Error processing file:', error);
+    res.status(500).send('Error uploading file.');
+  }
 });
 
 // Get all documents endpoint
