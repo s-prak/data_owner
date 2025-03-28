@@ -49,6 +49,7 @@ app.post("/upload", async (req, res) => {  // <-- Make this async
       //console.log(`Added document: ${filePath}`);
     });
 
+    console.log(JSON.stringify(tf_idf));
     
     // ✅ Now `await` works because this function is async
     const postIndexResponse = await axios.post(
