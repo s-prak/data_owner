@@ -38,13 +38,15 @@ app.post('/upload', upload.single('file'), async (req, res) => {
   try {
     // Read file content
     const fileContent = fs.readFileSync(req.file.path, 'utf8');
-
+    const filename= req.file.originalname.split('.')[0];
     // Prepare request body
     const requestBody = {
-      docId: encrypt(req.file.originalname.split('.')[0]), // Use original filename
+      docId: encrypt(filename), // Use original filename
       doc: encrypt(fileContent)
     };
-
+    console.log(filename);
+    console.log(requestBody);
+    
     // Send file data to the API
     const response = await axios.post('http://localhost:8080/document/post-doc', requestBody, {
       headers: { 'Content-Type': 'application/json' }
