@@ -46,9 +46,9 @@ app.post('/upload', upload.single('file'), async (req, res) => {
     };
     console.log(filename);
     console.log(requestBody);
-    
+
     // Send file data to the API
-    const response = await axios.post('http://localhost:8080/document/post-doc', requestBody, {
+    const response = await axios.post('http://65.0.131.153:8080/document/post-doc', requestBody, {
       headers: { 'Content-Type': 'application/json' }
     });
 
