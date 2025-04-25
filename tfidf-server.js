@@ -53,7 +53,7 @@ app.post("/upload", async (req, res) => {  // <-- Make this async
     
     // ✅ Now `await` works because this function is async
     const postIndexResponse = await axios.post(
-      "http://65.0.131.153:8080/inverted-index/post-index",
+      "http://13.203.157.202:8080/inverted-index/post-index",
       { index: encrypt(JSON.stringify(tf_idf)) }
     );
 
